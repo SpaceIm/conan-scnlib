@@ -8,7 +8,7 @@ required_conan_version = ">=1.33.0"
 class ScnlibConan(ConanFile):
     name = "scnlib"
     description = "scanf for modern C++"
-    license = " Apache-2.0"
+    license = "Apache-2.0"
     topics = ("scnlib", "parsing", "io", "scanf")
     homepage = "https://github.com/eliaskosunen/scnlib"
     url = "https://github.com/conan-io/conan-center-index"
