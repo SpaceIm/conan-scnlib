@@ -1,4 +1,5 @@
 from conans import ConanFile, CMake, tools
+from conans.errors import ConanInvalidConfiguration
 import os
 
 required_conan_version = ">=1.33.0"
@@ -42,9 +43,19 @@ class ScnlibConan(ConanFile):
         if self.options.header_only:
             del self.options.shared
 
+    @property
+    def _compilers_minimum_version(self):
+        return {
+            "gcc": "5",
+            "clang": "6.0",
+        }
+
     def validate(self):
         if self.settings.compiler.get_safe("cppstd"):
             tools.check_min_cppstd(self, 11)
+        minimum_version = self._compilers_minimum_version.get(str(self.settings.compiler), False)
+        if minimum_version and tools.Version(self.settings.compiler.version) < minimum_version:
+            raise ConanInvalidConfiguration("{} {} requires several C++11 features, which your compiler does not support.".format(self.name, self.version))
 
     def package_id(self):
         if self.options.header_only:
